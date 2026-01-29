@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grimório do Destino</title>
+    <title>Roladas com Amor</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -16,6 +16,47 @@
             margin: 0;
             overflow: hidden;
             font-family: 'MedievalSharp', cursive;
+            position: relative; /* Para posicionar os dados laterais */
+        }
+
+        /* Dados de RPG espalhados lateralmente */
+        .decoration-dice {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+            pointer-events: none; /* Não interage com o mouse */
+            z-index: 0; /* Fica atrás do pergaminho */
+        }
+
+        .decoration-dice.d20-left {
+            background-image: url('https://i.imgur.com/QhYhA2i.png'); /* Imagem de um D20 */
+            left: 5%;
+            top: 20%;
+            transform: rotate(-30deg);
+        }
+
+        .decoration-dice.d10-right {
+            background-image: url('https://i.imgur.com/uR2iR5n.png'); /* Imagem de um D10 */
+            right: 5%;
+            bottom: 25%;
+            transform: rotate(45deg);
+        }
+
+        .decoration-dice.d6-bottom-left {
+            background-image: url('https://i.imgur.com/P1i1L9M.png'); /* Imagem de um D6 */
+            left: 10%;
+            bottom: 10%;
+            transform: rotate(15deg);
+        }
+
+        .decoration-dice.d4-top-right {
+            background-image: url('https://i.imgur.com/k9bX3Fm.png'); /* Imagem de um D4 */
+            right: 8%;
+            top: 10%;
+            transform: rotate(-10deg);
         }
 
         /* O Pergaminho Irregular */
@@ -27,25 +68,49 @@
             padding: 40px;
             position: relative;
             box-shadow: 20px 20px 60px rgba(0,0,0,0.8);
-            /* Forma irregular de pergaminho */
             border-radius: 2% 4% 2% 4% / 4% 2% 4% 2%;
             border-left: 15px solid #d4c3a1;
             border-right: 15px solid #d4c3a1;
+            z-index: 1; /* Fica na frente dos dados de decoração */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
         h1 {
             font-family: 'Cinzel Decorative', cursive;
             text-align: center;
             color: #5c4033;
-            margin-bottom: 30px;
+            margin: 0 0 10px 0;
             text-decoration: underline;
+            font-size: 2.5rem;
         }
 
-        /* Área do Dado */
+        .dice-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dice-multiplier {
+            width: 50px;
+            padding: 8px;
+            font-size: 1.1rem;
+            text-align: center;
+            border: 2px solid #c5a059;
+            background: #4a4a4a;
+            color: #e4d5b7;
+            font-family: 'MedievalSharp', cursive;
+            border-radius: 5px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        /* Área do Dado Principal */
         .dice-container {
             width: 120px;
             height: 120px;
-            margin: 0 auto 30px;
             background: #8b0000;
             border: 5px solid #c5a059;
             border-radius: 15px;
@@ -56,6 +121,7 @@
             color: #fff;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
             position: relative;
+            margin: 0; /* Remove margem para se ajustar ao flexbox */
         }
 
         /* Animação de Chacoalhar */
@@ -75,6 +141,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
+            width: 100%; /* Ocupa a largura total do pergaminho */
         }
 
         .die-button {
@@ -87,15 +154,14 @@
             font-size: 1.2rem;
             font-weight: bold;
             transition: 0.3s;
-            /* Forma de Escudo/Pedra */
             clip-path: polygon(50% 0%, 100% 25%, 90% 80%, 50% 100%, 10% 80%, 0% 25%);
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+            flex-shrink: 0; /* Impede que os botões diminuam */
         }
 
-        /* Deixando os botões levemente tortos/assimétricos */
         .die-button:nth-child(odd) { transform: rotate(5deg); }
         .die-button:nth-child(even) { transform: rotate(-3deg); margin-top: 10px; }
 
@@ -107,19 +173,28 @@
 
         #status-msg {
             text-align: center;
-            margin-top: 20px;
             font-style: italic;
             color: #5c4033;
             min-height: 20px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="scroll">
-        <h1>Rolador de Dados</h1>
+    <div class="decoration-dice d20-left"></div>
+    <div class="decoration-dice d10-right"></div>
+    <div class="decoration-dice d6-bottom-left"></div>
+    <div class="decoration-dice d4-top-right"></div>
 
-        <div class="dice-container" id="die-box">?</div>
+    <div class="scroll">
+        <h1>Roladas com Amor</h1>
+
+        <div class="dice-controls">
+            <input type="number" id="multiplier" class="dice-multiplier" value="1" min="1" max="99">
+            <span style="color: #5c4033; font-weight: bold; font-size: 1.2rem;">x</span>
+            <div class="dice-container" id="die-box">?</div>
+        </div>
 
         <div class="dice-grid">
             <button class="die-button" onclick="rollDice(4)">D4</button>
@@ -138,39 +213,67 @@
         function rollDice(sides) {
             const dieBox = document.getElementById('die-box');
             const status = document.getElementById('status-msg');
+            const multiplier = parseInt(document.getElementById('multiplier').value);
             
-            // Inicia animação
+            if (isNaN(multiplier) || multiplier < 1) {
+                status.innerText = "Multiplicador inválido! Use um número inteiro maior que 0.";
+                return;
+            }
+
             dieBox.classList.add('rolling');
             status.innerText = "Chacoalhando o destino...";
             
-            // Simula a rolagem por 1 segundo
-            let rolls = 0;
+            let rollsCount = 0;
+            let currentTotal = 0;
+            let resultsArray = []; // Para armazenar os resultados individuais
+
             const interval = setInterval(() => {
-                dieBox.innerText = Math.floor(Math.random() * sides) + 1;
-                rolls++;
-                if (rolls > 10) {
+                const tempResult = Math.floor(Math.random() * sides) + 1;
+                dieBox.innerText = tempResult; // Mostra um resultado temporário
+                rollsCount++;
+                if (rollsCount >= 10) { // Garante pelo menos 10 "rolagens" rápidas
                     clearInterval(interval);
-                    finalizeRoll(sides);
+                    finalizeMultipleRolls(sides, multiplier);
                 }
             }, 80);
         }
 
-        function finalizeRoll(sides) {
+        function finalizeMultipleRolls(sides, multiplier) {
             const dieBox = document.getElementById('die-box');
             const status = document.getElementById('status-msg');
-            const result = Math.floor(Math.random() * sides) + 1;
+            let totalResult = 0;
+            let individualResults = [];
+
+            for (let i = 0; i < multiplier; i++) {
+                const roll = Math.floor(Math.random() * sides) + 1;
+                individualResults.push(roll);
+                totalResult += roll;
+            }
             
             dieBox.classList.remove('rolling');
-            dieBox.innerText = result;
-
-            if (sides === 20 && result === 20) {
-                status.innerText = "CRÍTICO! O bardo cantará sua glória!";
-                dieBox.style.boxShadow = "0 0 30px #ffd700";
-            } else if (sides === 20 && result === 1) {
-                status.innerText = "FALHA CRÍTICA... Prepare o novo personagem.";
-                dieBox.style.boxShadow = "0 0 30px #000";
+            
+            // Se for uma única rolagem, mostra apenas o resultado
+            if (multiplier === 1) {
+                dieBox.innerText = individualResults[0];
             } else {
-                status.innerText = `Você obteve ${result} no D${sides}.`;
+                // Para múltiplas rolagens, mostra a soma no dado principal
+                dieBox.innerText = totalResult;
+            }
+
+            // Mensagens de status mais detalhadas
+            if (multiplier === 1) {
+                if (sides === 20 && individualResults[0] === 20) {
+                    status.innerText = "CRÍTICO! O bardo cantará sua glória!";
+                    dieBox.style.boxShadow = "0 0 30px #ffd700";
+                } else if (sides === 20 && individualResults[0] === 1) {
+                    status.innerText = "FALHA CRÍTICA... Prepare o novo personagem.";
+                    dieBox.style.boxShadow = "0 0 30px #000";
+                } else {
+                    status.innerText = `Você obteve ${individualResults[0]} no D${sides}.`;
+                    dieBox.style.boxShadow = "inset 0 0 20px rgba(0,0,0,0.5)";
+                }
+            } else {
+                status.innerText = `Você rolou ${multiplier}D${sides}. Resultados: [${individualResults.join(', ')}]. Total: ${totalResult}.`;
                 dieBox.style.boxShadow = "inset 0 0 20px rgba(0,0,0,0.5)";
             }
         }
