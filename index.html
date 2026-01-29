@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grimório de Dados Medieval</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2c1e16;
+            --parchment: #e4d5b7;
+            --iron: #4a4a4a;
+            --gold: #c5a059;
+            --accent: #8b0000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#3e2b1f 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #333;
+            font-family: 'MedievalSharp', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--parchment);
+            padding: 2rem;
+            border: 8px double var(--iron);
+            border-radius: 5px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 50px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--accent);
+            margin-top: 0;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+
+        .display-area {
+            background: rgba(0,0,0,0.05);
+            border: 2px inset var(--gold);
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin: 20px 0;
+            color: var(--accent);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .dice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+        }
+
+        button {
+            background: var(--iron);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            padding: 10px;
+            font-size: 1.2rem;
+            font-family: 'MedievalSharp', cursive;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .history {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #555;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Rolador de Dados</h1>
+        
+        <div class="display-area" id="result">-</div>
+
+        <div class="dice-grid">
+            <button onclick="roll(4)">D4</button>
+            <button onclick="roll(6)">D6</button>
+            <button onclick="roll(8)">D8</button>
+            <button onclick="roll(10)">D10</button>
+            <button onclick="roll(12)">D12</button>
+            <button onclick="roll(20)">D20</button>
+            <button onclick="roll(100)">D100</button>
+        </div>
+
+        <div class="history" id="history">Role os dados para iniciar sua jornada...</div>
+    </div>
+
+    <script>
+        function roll(sides) {
+            const display = document.getElementById('result');
+            const history = document.getElementById('history');
+            
+            // Pequena animação de "rolando"
+            display.style.opacity = "0.5";
+            
+            setTimeout(() => {
+                const result = Math.floor(Math.random() * sides) + 1;
+                display.innerText = result;
+                display.style.opacity = "1";
+                
+                // Mensagem especial para Críticos no D20
+                if(sides === 20 && result === 20) {
+                    history.innerText = "CRÍTICO! Os deuses sorriem para você.";
+                    display.style.color = "gold";
+                } else if (sides === 20 && result === 1) {
+                    history.innerText = "FALHA CRÍTICA! Cuidado com a sua retaguarda...";
+                    display.style.color = "black";
+                } else {
+                    history.innerText = `Você rolou um D${sides}.`;
+                    display.style.color = "var(--accent)";
+                }
+            }, 150);
+        }
+    </script>
+</body>
+</html>
