@@ -8,162 +8,178 @@
     <style>
         :root {
             --gold: #d4af37;
-            --iron: linear-gradient(145deg, #444, #222);
-            --blood: #660000;
+            --iron: linear-gradient(145deg, #333, #111);
+            --blood: #8b0000;
         }
 
         body {
-            /* Fundo de madeira escura */
-            background: #120c06 url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            background: #0a0705 url('https://www.transparenttextures.com/patterns/dark-wood.png');
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             font-family: 'MedievalSharp', cursive;
+            overflow-x: hidden;
         }
 
-        /* PERGAMINHO COM TEXTURA */
-        .main-scroll {
-            background: #c2b280 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 40px;
-            width: 90%;
-            max-width: 550px;
+        /* PERGAMINHO ASSIMÉTRICO E RASGADO */
+        .scroll-container {
             position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 100px rgba(0,0,0,0.2);
-            border: 2px solid #5c4033;
-            /* Bordas irregulares */
-            border-radius: 5px 15px 5px 10px / 10px 5px 15px 5px;
+            width: 95%;
+            max-width: 600px;
+            padding: 60px 40px;
+            background: #d2b48c url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            /* O segredo da assimetria está aqui: */
+            clip-path: polygon(2% 2%, 98% 1%, 99% 95%, 95% 98%, 5% 99%, 0% 95%);
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.7);
+            border: 1px solid #b89a6d;
         }
 
-        /* MADEIRAS DO PERGAMINHO */
-        .scroll-rod {
-            height: 25px;
-            width: 106%;
-            left: -3%;
-            background: #3e2723;
+        /* Sombras para dar volume de papel enrolado */
+        .scroll-container::before {
+            content: "";
             position: absolute;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-            border: 1px solid #2a1b19;
+            top: 0; left: 0; right: 0; height: 30px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent);
         }
-        .top-rod { top: -12px; }
-        .bottom-rod { bottom: -12px; }
+
+        /* HASTES MAIS REAIS */
+        .rod {
+            height: 35px;
+            width: 110%;
+            left: -5%;
+            background: #2b1d16;
+            position: absolute;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            z-index: 2;
+            border: 2px solid #1a110d;
+        }
+        .top-rod { top: -15px; transform: rotate(-0.5deg); }
+        .bottom-rod { bottom: -15px; transform: rotate(0.5deg); }
 
         h1 {
             font-family: 'Cinzel Decorative', serif;
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: var(--blood);
-            margin: 10px 0 30px;
-            text-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+            margin: 0 0 30px 0;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.2);
         }
 
-        /* GEMA MÁGICA (DADO CENTRAL) */
-        .display-container {
+        /* ÁREA DO RESULTADO (GEMA) */
+        .display-area {
             position: relative;
-            width: 160px;
-            height: 160px;
+            width: 180px;
+            height: 180px;
             margin: 0 auto 40px;
-        }
-
-        #die-box {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 30%, #ff3300, #4d0000);
-            border: 4px solid var(--gold);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: #fff;
-            box-shadow: 0 0 40px rgba(255, 51, 0, 0.4), inset -10px -10px 20px rgba(0,0,0,0.5);
-            text-shadow: 3px 3px 6px #000;
+            z-index: 3;
         }
 
-        /* SELO DE CERA (MULTIPLICADOR) */
-        .wax-seal {
+        #die-box {
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle at 30% 30%, #ff4500, #600);
+            border: 5px solid var(--gold);
+            /* Forma de gema lapidada irregular */
+            clip-path: polygon(50% 0%, 95% 25%, 100% 70%, 50% 100%, 0% 70%, 5% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            color: #fff;
+            filter: drop-shadow(0 0 15px rgba(255,69,0,0.5));
+            text-shadow: 3px 3px 10px #000;
+        }
+
+        /* SELO DE CERA */
+        .multiplier-seal {
             position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #8b0000;
-            width: 60px;
-            height: 60px;
+            left: 0;
+            top: 30%;
+            background: #7a0000;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
-            border: 2px solid #a50000;
-            z-index: 5;
+            border: 3px double #900;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+            transform: rotate(-10deg);
         }
 
-        .wax-seal input {
+        .multiplier-seal input {
             background: transparent;
             border: none;
             color: var(--gold);
-            width: 35px;
-            font-size: 1.4rem;
+            width: 40px;
+            font-size: 1.5rem;
             text-align: center;
             font-family: 'MedievalSharp';
-            font-weight: bold;
+            outline: none;
         }
 
-        /* BOTÕES DE METAL */
+        /* BOTÕES DE METAL RÚSTICO */
         .dice-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
         }
 
         .die-btn {
             background: var(--iron);
             color: var(--gold);
-            border: 1px solid #555;
-            padding: 15px 0;
+            border: 2px solid #444;
+            padding: 12px 20px;
             font-family: 'MedievalSharp';
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
-            transition: all 0.2s;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            transition: 0.2s;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
         }
 
         .die-btn:hover {
-            filter: brightness(1.3);
-            transform: translateY(-3px);
+            filter: brightness(1.5);
+            transform: scale(1.1) rotate(2deg);
             color: #fff;
         }
 
         #status-msg {
             margin-top: 30px;
             text-align: center;
-            font-size: 1.1rem;
-            color: #4e342e;
-            border-top: 2px solid rgba(0,0,0,0.1);
-            padding-top: 15px;
+            font-size: 1.2rem;
+            color: #3e2723;
+            min-height: 50px;
         }
 
-        /* ANIMAÇÃO DE ROLAGEM */
-        .rolling { animation: shake 0.12s infinite alternate; }
-        @keyframes shake {
-            from { transform: rotate(-2deg) scale(1.05); }
-            to { transform: rotate(2deg) scale(1.05); }
+        /* ANIMAÇÃO */
+        .rolling { animation: rumble 0.1s infinite; }
+        @keyframes rumble {
+            0% { transform: translate(2px, 2px) rotate(1deg); }
+            50% { transform: translate(-2px, -2px) rotate(-1deg); }
+            100% { transform: translate(1px, -1px) rotate(0deg); }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-scroll">
-        <div class="scroll-rod top-rod"></div>
+    <audio id="dice-sound" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/dice-roll-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="scroll-container">
+        <div class="rod top-rod"></div>
         
         <h1>Roladas com Amor</h1>
 
-        <div class="display-container">
-            <div class="wax-seal">
+        <div class="display-area">
+            <div class="multiplier-seal">
                 <input type="number" id="qty" value="1" min="1">
             </div>
             <div id="die-box">?</div>
@@ -179,9 +195,9 @@
             <button class="die-btn" onclick="roll(100)">D100</button>
         </div>
 
-        <div id="status-msg">O que os fados reservam para você hoje?</div>
+        <div id="status-msg">O mestre aguarda sua jogada...</div>
 
-        <div class="scroll-rod bottom-rod"></div>
+        <div class="rod bottom-rod"></div>
     </div>
 
     <script>
@@ -189,9 +205,14 @@
             const box = document.getElementById('die-box');
             const status = document.getElementById('status-msg');
             const qty = document.getElementById('qty').value;
+            const sound = document.getElementById('dice-sound');
             
+            // Toca o som
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Áudio precisa de interação inicial"));
+
             box.classList.add('rolling');
-            status.innerHTML = "Lançando os dados na mesa...";
+            status.innerHTML = "Lançando dados na taverna...";
 
             setTimeout(() => {
                 box.classList.remove('rolling');
@@ -207,13 +228,13 @@
                 box.innerText = total;
                 
                 if (qty > 1) {
-                    status.innerHTML = `Soma: <b>${total}</b> <br> <small>Detalhes: (${results.join(' + ')})</small>`;
+                    status.innerHTML = `Soma: <b>${total}</b> <br> <small style="opacity:0.7">Jogada: [${results.join(' + ')}]</small>`;
                 } else {
-                    if (sides === 20 && total === 20) status.innerHTML = "<b>SUCESSO CRÍTICO!</b>";
-                    else if (sides === 20 && total === 1) status.innerHTML = "<b>FALHA CRÍTICA...</b>";
+                    if (sides === 20 && total === 20) status.innerHTML = "<b style='color:#d4af37'>ACERTO CRÍTICO!</b>";
+                    else if (sides === 20 && total === 1) status.innerHTML = "<b style='color:black'>FALHA CRÍTICA...</b>";
                     else status.innerHTML = `Rolagem: <b>${total}</b> no D${sides}`;
                 }
-            }, 700);
+            }, 600);
         }
     </script>
 </body>
