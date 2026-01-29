@@ -6,276 +6,210 @@
     <title>Roladas com Amor</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --parchment: #e4d5b7;
+            --iron: #3d3d3d;
+            --gold: #c5a059;
+            --blood: #8b0000;
+        }
+
         body {
-            background: #1a120b;
-            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png'); /* Textura de mesa de madeira */
+            background: #1a0f0a;
+            background-image: radial-gradient(circle, #2c1e16 0%, #1a0f0a 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
             font-family: 'MedievalSharp', cursive;
-            position: relative; /* Para posicionar os dados laterais */
+            color: #2c1e16;
         }
 
-        /* Dados de RPG espalhados lateralmente */
-        .decoration-dice {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background-size: cover;
-            background-repeat: no-repeat;
-            opacity: 0.7;
-            pointer-events: none; /* Não interage com o mouse */
-            z-index: 0; /* Fica atrás do pergaminho */
-        }
-
-        .decoration-dice.d20-left {
-            background-image: url('https://i.imgur.com/QhYhA2i.png'); /* Imagem de um D20 */
-            left: 5%;
-            top: 20%;
-            transform: rotate(-30deg);
-        }
-
-        .decoration-dice.d10-right {
-            background-image: url('https://i.imgur.com/uR2iR5n.png'); /* Imagem de um D10 */
-            right: 5%;
-            bottom: 25%;
-            transform: rotate(45deg);
-        }
-
-        .decoration-dice.d6-bottom-left {
-            background-image: url('https://i.imgur.com/P1i1L9M.png'); /* Imagem de um D6 */
-            left: 10%;
-            bottom: 10%;
-            transform: rotate(15deg);
-        }
-
-        .decoration-dice.d4-top-right {
-            background-image: url('https://i.imgur.com/k9bX3Fm.png'); /* Imagem de um D4 */
-            right: 8%;
-            top: 10%;
-            transform: rotate(-10deg);
-        }
-
-        /* O Pergaminho Irregular */
-        .scroll {
-            background: #e4d5b7;
+        /* O PERGAMINHO IRREGULAR */
+        .main-scroll {
+            background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            padding: 50px;
             width: 90%;
             max-width: 500px;
-            padding: 40px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), 20px 20px 0 rgba(0,0,0,0.2);
             position: relative;
-            box-shadow: 20px 20px 60px rgba(0,0,0,0.8);
-            border-radius: 2% 4% 2% 4% / 4% 2% 4% 2%;
-            border-left: 15px solid #d4c3a1;
-            border-right: 15px solid #d4c3a1;
-            z-index: 1; /* Fica na frente dos dados de decoração */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+            /* Efeito de papel rasgado/irregular */
+            border-radius: 2% 5% 3% 2% / 10% 2% 10% 3%;
+            border: 2px solid #d4c3a1;
         }
+
+        /* Enfeites de madeira nas pontas */
+        .main-scroll::before, .main-scroll::after {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 105%;
+            left: -2.5%;
+            background: #4e342e;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+        }
+        .main-scroll::before { top: -10px; }
+        .main-scroll::after { bottom: -10px; }
 
         h1 {
-            font-family: 'Cinzel Decorative', cursive;
+            font-family: 'Cinzel Decorative', serif;
             text-align: center;
-            color: #5c4033;
-            margin: 0 0 10px 0;
-            text-decoration: underline;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
+            margin: 0 0 20px 0;
+            color: var(--blood);
+            text-shadow: 1px 1px 0px var(--gold);
         }
 
-        .dice-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .dice-multiplier {
-            width: 50px;
-            padding: 8px;
-            font-size: 1.1rem;
-            text-align: center;
-            border: 2px solid #c5a059;
-            background: #4a4a4a;
-            color: #e4d5b7;
-            font-family: 'MedievalSharp', cursive;
-            border-radius: 5px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-        }
-
-        /* Área do Dado Principal */
-        .dice-container {
-            width: 120px;
-            height: 120px;
-            background: #8b0000;
-            border: 5px solid #c5a059;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #fff;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        /* O DADO CENTRAL (ESFERA DE ENERGIA) */
+        .display-container {
             position: relative;
-            margin: 0; /* Remove margem para se ajustar ao flexbox */
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
         }
 
-        /* Animação de Chacoalhar */
-        .rolling {
-            animation: shake 0.15s infinite;
-        }
-
-        @keyframes shake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            50% { transform: translate(-1px, -2px) rotate(-2deg); }
-            100% { transform: translate(1px, 2px) rotate(2deg); }
-        }
-
-        /* Botões Estilo Escudo Irregular */
-        .dice-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            width: 100%; /* Ocupa a largura total do pergaminho */
-        }
-
-        .die-button {
-            background: #4a4a4a;
-            color: #c5a059;
-            width: 70px;
-            height: 70px;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: 0.3s;
-            clip-path: polygon(50% 0%, 100% 25%, 90% 80%, 50% 100%, 10% 80%, 0% 25%);
+        #die-box {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ff4500, #8b0000);
+            border: 4px solid var(--gold);
+            border-radius: 50% 20% 50% 20%; /* Forma mística */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.4);
-            flex-shrink: 0; /* Impede que os botões diminuam */
+            font-size: 3.5rem;
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.6), inset 0 0 20px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+            transition: 0.2s;
         }
 
-        .die-button:nth-child(odd) { transform: rotate(5deg); }
-        .die-button:nth-child(even) { transform: rotate(-3deg); margin-top: 10px; }
+        /* MULTIPLICADOR (ESTILO SELO) */
+        .multiplier-area {
+            position: absolute;
+            left: -20px;
+            top: 40px;
+            background: var(--blood);
+            color: var(--gold);
+            padding: 10px;
+            border-radius: 50%;
+            border: 3px double var(--gold);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
 
-        .die-button:hover {
-            background: #c5a059;
-            color: #2c1e16;
-            transform: scale(1.1) rotate(0deg) !important;
+        .multiplier-area input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 30px;
+            font-family: 'MedievalSharp';
+            font-size: 1.2rem;
+            text-align: center;
+            outline: none;
+        }
+
+        /* GRID DE BOTÕES (ESCUDOS) */
+        .dice-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .die-btn {
+            background: var(--iron);
+            color: var(--gold);
+            border: none;
+            padding: 15px 5px;
+            font-family: 'MedievalSharp';
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            /* Forma de escudo metálico */
+            clip-path: polygon(50% 0%, 100% 20%, 100% 70%, 50% 100%, 0% 70%, 0% 20%);
+        }
+
+        .die-btn:hover {
+            background: var(--blood);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
         }
 
         #status-msg {
+            margin-top: 25px;
             text-align: center;
             font-style: italic;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 10px;
             color: #5c4033;
-            min-height: 20px;
-            margin-top: 20px;
+        }
+
+        /* ANIMAÇÃO */
+        .rolling {
+            animation: shake 0.1s infinite;
+            filter: hue-rotate(90deg);
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-1px, -2px) rotate(-1deg); }
+            100% { transform: translate(1px, 2px) rotate(1deg); }
         }
     </style>
 </head>
 <body>
 
-    <div class="decoration-dice d20-left"></div>
-    <div class="decoration-dice d10-right"></div>
-    <div class="decoration-dice d6-bottom-left"></div>
-    <div class="decoration-dice d4-top-right"></div>
-
-    <div class="scroll">
+    <div class="main-scroll">
         <h1>Roladas com Amor</h1>
 
-        <div class="dice-controls">
-            <input type="number" id="multiplier" class="dice-multiplier" value="1" min="1" max="99">
-            <span style="color: #5c4033; font-weight: bold; font-size: 1.2rem;">x</span>
-            <div class="dice-container" id="die-box">?</div>
+        <div class="display-container">
+            <div class="multiplier-area">
+                <small>x</small><input type="number" id="qty" value="1" min="1">
+            </div>
+            <div id="die-box">?</div>
         </div>
 
         <div class="dice-grid">
-            <button class="die-button" onclick="rollDice(4)">D4</button>
-            <button class="die-button" onclick="rollDice(6)">D6</button>
-            <button class="die-button" onclick="rollDice(8)">D8</button>
-            <button class="die-button" onclick="rollDice(10)">D10</button>
-            <button class="die-button" onclick="rollDice(12)">D12</button>
-            <button class="die-button" onclick="rollDice(20)">D20</button>
-            <button class="die-button" onclick="rollDice(100)">D100</button>
+            <button class="die-btn" onclick="roll(4)">D4</button>
+            <button class="die-btn" onclick="roll(6)">D6</button>
+            <button class="die-btn" onclick="roll(8)">D8</button>
+            <button class="die-btn" onclick="roll(10)">D10</button>
+            <button class="die-btn" onclick="roll(12)">D12</button>
+            <button class="die-btn" onclick="roll(20)">D20</button>
+            <button class="die-btn" onclick="roll(100)">D100</button>
         </div>
 
-        <div id="status-msg">Aguardando seu destino...</div>
+        <div id="status-msg">Escolha seu destino, viajante...</div>
     </div>
 
     <script>
-        function rollDice(sides) {
-            const dieBox = document.getElementById('die-box');
+        function roll(sides) {
+            const box = document.getElementById('die-box');
             const status = document.getElementById('status-msg');
-            const multiplier = parseInt(document.getElementById('multiplier').value);
+            const qty = document.getElementById('qty').value;
             
-            if (isNaN(multiplier) || multiplier < 1) {
-                status.innerText = "Multiplicador inválido! Use um número inteiro maior que 0.";
-                return;
-            }
+            box.classList.add('rolling');
+            status.innerText = "Os dados estão no ar...";
 
-            dieBox.classList.add('rolling');
-            status.innerText = "Chacoalhando o destino...";
-            
-            let rollsCount = 0;
-            let currentTotal = 0;
-            let resultsArray = []; // Para armazenar os resultados individuais
-
-            const interval = setInterval(() => {
-                const tempResult = Math.floor(Math.random() * sides) + 1;
-                dieBox.innerText = tempResult; // Mostra um resultado temporário
-                rollsCount++;
-                if (rollsCount >= 10) { // Garante pelo menos 10 "rolagens" rápidas
-                    clearInterval(interval);
-                    finalizeMultipleRolls(sides, multiplier);
+            setTimeout(() => {
+                box.classList.remove('rolling');
+                let total = 0;
+                let results = [];
+                
+                for(let i=0; i<qty; i++) {
+                    let r = Math.floor(Math.random() * sides) + 1;
+                    results.push(r);
+                    total += r;
                 }
-            }, 80);
-        }
 
-        function finalizeMultipleRolls(sides, multiplier) {
-            const dieBox = document.getElementById('die-box');
-            const status = document.getElementById('status-msg');
-            let totalResult = 0;
-            let individualResults = [];
-
-            for (let i = 0; i < multiplier; i++) {
-                const roll = Math.floor(Math.random() * sides) + 1;
-                individualResults.push(roll);
-                totalResult += roll;
-            }
-            
-            dieBox.classList.remove('rolling');
-            
-            // Se for uma única rolagem, mostra apenas o resultado
-            if (multiplier === 1) {
-                dieBox.innerText = individualResults[0];
-            } else {
-                // Para múltiplas rolagens, mostra a soma no dado principal
-                dieBox.innerText = totalResult;
-            }
-
-            // Mensagens de status mais detalhadas
-            if (multiplier === 1) {
-                if (sides === 20 && individualResults[0] === 20) {
-                    status.innerText = "CRÍTICO! O bardo cantará sua glória!";
-                    dieBox.style.boxShadow = "0 0 30px #ffd700";
-                } else if (sides === 20 && individualResults[0] === 1) {
-                    status.innerText = "FALHA CRÍTICA... Prepare o novo personagem.";
-                    dieBox.style.boxShadow = "0 0 30px #000";
-                } else {
-                    status.innerText = `Você obteve ${individualResults[0]} no D${sides}.`;
-                    dieBox.style.boxShadow = "inset 0 0 20px rgba(0,0,0,0.5)";
-                }
-            } else {
-                status.innerText = `Você rolou ${multiplier}D${sides}. Resultados: [${individualResults.join(', ')}]. Total: ${totalResult}.`;
-                dieBox.style.boxShadow = "inset 0 0 20px rgba(0,0,0,0.5)";
-            }
+                box.innerText = total;
+                status.innerText = qty > 1 ? `Resultados: [${results.join(' + ')}]` : `Você rolou um D${sides}`;
+                
+                if(sides == 20 && total == 20) status.innerText = "SUCESSO CRÍTICO!";
+                if(sides == 20 && total == 1) status.innerText = "FALHA CRÍTICA...";
+            }, 600);
         }
     </script>
 </body>
