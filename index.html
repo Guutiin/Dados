@@ -20,157 +20,140 @@
             min-height: 100vh;
             margin: 0;
             font-family: 'MedievalSharp', cursive;
-            overflow-x: hidden;
         }
 
-        /* PERGAMINHO ASSIMÉTRICO E RASGADO */
+        /* PERGAMINHO MAIS LARGO E VISÍVEL */
         .scroll-container {
             position: relative;
             width: 95%;
             max-width: 600px;
-            padding: 60px 40px;
+            padding: 50px 20px;
             background: #d2b48c url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            /* O segredo da assimetria está aqui: */
-            clip-path: polygon(2% 2%, 98% 1%, 99% 95%, 95% 98%, 5% 99%, 0% 95%);
-            box-shadow: 20px 20px 60px rgba(0,0,0,0.7);
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.8);
             border: 1px solid #b89a6d;
+            /* Bordas levemente irregulares sem cortar conteúdo */
+            border-radius: 5px 15px 5px 25px / 25px 5px 35px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Sombras para dar volume de papel enrolado */
-        .scroll-container::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 30px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent);
-        }
-
-        /* HASTES MAIS REAIS */
         .rod {
-            height: 35px;
-            width: 110%;
-            left: -5%;
+            height: 30px;
+            width: 105%;
             background: #2b1d16;
             position: absolute;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
-            z-index: 2;
-            border: 2px solid #1a110d;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+            z-index: 10;
         }
-        .top-rod { top: -15px; transform: rotate(-0.5deg); }
-        .bottom-rod { bottom: -15px; transform: rotate(0.5deg); }
+        .top-rod { top: -15px; }
+        .bottom-rod { bottom: -15px; }
 
         h1 {
             font-family: 'Cinzel Decorative', serif;
-            text-align: center;
-            font-size: 2.8rem;
             color: var(--blood);
-            margin: 0 0 30px 0;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.2);
+            font-size: 2.5rem;
+            margin: 10px 0;
+            text-align: center;
         }
 
-        /* ÁREA DO RESULTADO (GEMA) */
-        .display-area {
-            position: relative;
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 40px;
+        /* ÁREA DE CONTROLE (MULTIPLICADOR + DADO) */
+        .dice-area {
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 3;
+            gap: 20px;
+            margin: 20px 0;
         }
 
-        #die-box {
-            width: 140px;
-            height: 140px;
-            background: radial-gradient(circle at 30% 30%, #ff4500, #600);
-            border: 5px solid var(--gold);
-            /* Forma de gema lapidada irregular */
-            clip-path: polygon(50% 0%, 95% 25%, 100% 70%, 50% 100%, 0% 70%, 5% 25%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4.5rem;
-            color: #fff;
-            filter: drop-shadow(0 0 15px rgba(255,69,0,0.5));
-            text-shadow: 3px 3px 10px #000;
-        }
-
-        /* SELO DE CERA */
-        .multiplier-seal {
-            position: absolute;
-            left: 0;
-            top: 30%;
+        /* SELO DE CERA (VOLTOU!) */
+        .wax-seal {
             background: #7a0000;
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 3px double #900;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.4);
-            transform: rotate(-10deg);
+            border: 3px double #b00;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+            transform: rotate(-5deg);
         }
 
-        .multiplier-seal input {
+        .wax-seal span { font-size: 0.7rem; color: var(--gold); }
+
+        .wax-seal input {
             background: transparent;
             border: none;
-            color: var(--gold);
-            width: 40px;
-            font-size: 1.5rem;
+            color: white;
+            width: 45px;
+            font-size: 1.6rem;
             text-align: center;
             font-family: 'MedievalSharp';
             outline: none;
         }
 
-        /* BOTÕES DE METAL RÚSTICO */
+        #die-box {
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle at 30% 30%, #ff4500, #600);
+            border: 4px solid var(--gold);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255,69,0,0.5);
+            text-shadow: 2px 2px 5px #000;
+        }
+
         .dice-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
+            max-width: 90%;
         }
 
         .die-btn {
             background: var(--iron);
             color: var(--gold);
-            border: 2px solid #444;
-            padding: 12px 20px;
+            border: 1px solid #444;
+            padding: 12px 18px;
             font-family: 'MedievalSharp';
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: 0.2s;
-            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
         }
 
         .die-btn:hover {
-            filter: brightness(1.5);
-            transform: scale(1.1) rotate(2deg);
-            color: #fff;
+            filter: brightness(1.4);
+            transform: scale(1.1);
         }
 
         #status-msg {
-            margin-top: 30px;
+            margin-top: 25px;
             text-align: center;
-            font-size: 1.2rem;
             color: #3e2723;
-            min-height: 50px;
+            min-height: 40px;
+            font-style: italic;
         }
 
-        /* ANIMAÇÃO */
         .rolling { animation: rumble 0.1s infinite; }
         @keyframes rumble {
-            0% { transform: translate(2px, 2px) rotate(1deg); }
-            50% { transform: translate(-2px, -2px) rotate(-1deg); }
-            100% { transform: translate(1px, -1px) rotate(0deg); }
+            0% { transform: translate(1px, 1px); }
+            100% { transform: translate(-1px, -1px); }
         }
     </style>
 </head>
 <body>
 
-    <audio id="dice-sound" preload="auto">
-        <source src="https://www.soundjay.com/misc/sounds/dice-roll-1.mp3" type="audio/mpeg">
+    <audio id="dice-sound">
+        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_510d981881.mp3" type="audio/mpeg">
     </audio>
 
     <div class="scroll-container">
@@ -178,8 +161,9 @@
         
         <h1>Roladas com Amor</h1>
 
-        <div class="display-area">
-            <div class="multiplier-seal">
+        <div class="dice-area">
+            <div class="wax-seal">
+                <span>Qtd</span>
                 <input type="number" id="qty" value="1" min="1">
             </div>
             <div id="die-box">?</div>
@@ -195,7 +179,7 @@
             <button class="die-btn" onclick="roll(100)">D100</button>
         </div>
 
-        <div id="status-msg">O mestre aguarda sua jogada...</div>
+        <div id="status-msg">O destino aguarda...</div>
 
         <div class="rod bottom-rod"></div>
     </div>
@@ -207,12 +191,12 @@
             const qty = document.getElementById('qty').value;
             const sound = document.getElementById('dice-sound');
             
-            // Toca o som
+            // Tentativa de tocar o som
             sound.currentTime = 0;
-            sound.play().catch(e => console.log("Áudio precisa de interação inicial"));
+            sound.play().catch(() => console.log("Clique na página antes para habilitar áudio."));
 
             box.classList.add('rolling');
-            status.innerHTML = "Lançando dados na taverna...";
+            status.innerText = "Lançando os dados...";
 
             setTimeout(() => {
                 box.classList.remove('rolling');
@@ -226,15 +210,8 @@
                 }
 
                 box.innerText = total;
-                
-                if (qty > 1) {
-                    status.innerHTML = `Soma: <b>${total}</b> <br> <small style="opacity:0.7">Jogada: [${results.join(' + ')}]</small>`;
-                } else {
-                    if (sides === 20 && total === 20) status.innerHTML = "<b style='color:#d4af37'>ACERTO CRÍTICO!</b>";
-                    else if (sides === 20 && total === 1) status.innerHTML = "<b style='color:black'>FALHA CRÍTICA...</b>";
-                    else status.innerHTML = `Rolagem: <b>${total}</b> no D${sides}`;
-                }
-            }, 600);
+                status.innerHTML = qty > 1 ? `Total: ${total} <br><small>(${results.join(' + ')})</small>` : `Rolagem: ${total}`;
+            }, 500);
         }
     </script>
 </body>
